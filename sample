@@ -1,0 +1,5 @@
+mkdir -p ~/.config/Code/User
+echo '{
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false
+}' > ~/.config/Code/User/settings.json
