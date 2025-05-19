@@ -3,3 +3,32 @@ echo '{
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false
 }' > ~/.config/Code/User/settings.json
+
+
+
+from azure.identity import DefaultAzureCredential
+import requests
+
+# Replace these with your actual values
+endpoint = "https://YOUR-RESOURCE-NAME.openai.azure.com/"
+deployment = "YOUR-DEPLOYMENT-NAME"
+api_version = "2024-02-15-preview"
+
+# Authenticate using your Entra ID login
+credential = DefaultAzureCredential()
+token = credential.get_token("https://cognitiveservices.azure.com/.default")
+
+# Call the OpenAI API
+headers = {
+    "Authorization": f"Bearer {token.token}",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "messages": [{"role": "user", "content": "Hello from local machine"}],
+    "max_tokens": 50
+}
+
+url = f"{endpoint}openai/deployments/{deployment}/chat/completions?api-version={api_version}"
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
